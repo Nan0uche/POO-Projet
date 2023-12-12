@@ -29,15 +29,19 @@ string Mechant::get_ultime() {
 }
 
 int Mechant::get_damage_attack1() {
-    return damage_attack1;
+    return get_attack() + rand() % 11;
 }
 
 int Mechant::get_damage_attack2() {
-    return damage_attack2;
+    return get_attack() + 10 + rand() % 16;
 }
 
 int Mechant::get_damage_attack3() {
-    return damage_attack3;
+    return get_attack() + 25 + rand() % 26;
+}
+
+int Mechant::get_ultimate() {
+    return get_damage_attack1() + get_damage_attack2() + get_damage_attack3();
 }
 
 int Mechant::get_manacost_attack1() {
@@ -50,22 +54,6 @@ int Mechant::get_manacost_attack2() {
 
 int Mechant::get_manacost_attack3() {
     return manacost_attack3;
-}
-
-int Mechant::set_attack1() {
-    return get_attack() + 10;
-}
-
-int Mechant::set_attack2() {
-    return get_attack() + 25;
-}
-
-int Mechant::set_attack3() {
-    return get_attack() + 50;
-}
-
-int Mechant::set_ultimate() {
-    return get_damage_attack1() + get_damage_attack2() + get_damage_attack3();
 }
 
 int Mechant::set_manacost_attack1(int mana) {

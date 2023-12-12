@@ -1,7 +1,7 @@
 #include "Hero.hpp"
 #include "Mechant.hpp"
 
-void printCharList(vector<Hero> herolist, vector<Mechant> mechantlist, bool ishero) {
+void printCharList(vector<Hero>& herolist, vector<Mechant>& mechantlist, bool ishero) {
     if (ishero) {
         if (herolist.size() == 0) {
             cout << "Votre liste de Hero est vide !" << endl;
@@ -65,7 +65,7 @@ void printCharList(vector<Hero> herolist, vector<Mechant> mechantlist, bool ishe
 
 }
 
-void printStat(Personnage p) {
+void printStat(Personnage& p) {
     printf("\n");
     cout << "Vie restante : " << p.get_health() << "/" << p.get_maxhealth() << endl;
     cout << "Attaque : " << p.get_attack() << endl;
@@ -100,7 +100,7 @@ Hero suggestHeroChoice(string name, vector<Hero>& herolist, vector<Mechant>& mec
 }
 
 
-Mechant suggestMechantChoice(string name, vector<Hero> herolist, vector<Mechant> mechantlist) {
+Mechant suggestMechantChoice(string name, vector<Hero>& herolist, vector<Mechant>& mechantlist) {
     int h;
     cout << name << ") Vous etes un Mechant" << endl;
     while (true) {
@@ -151,187 +151,96 @@ void checkWin(Personnage& p1, Personnage& p2, string p1name, string p2name) {
     }
 }
 
-int makeHeroAction(Hero& h, int attacksender) {
+int makeAction(Personnage& p, int attacksender) {
     int brutdamage;
     printf("\n");
-    if (h.get_action() == 1) {
-        brutdamage = h.set_attack1();
-        h.set_mana(h.get_mana() - h.get_manacost_attack1());
-        cout << h.get_attack1() << " !" << endl;
-    }
-    else if (h.get_action() == 2) {
-        brutdamage = h.set_attack2();
-        h.set_mana(h.get_mana() - h.get_manacost_attack2());
-        cout << h.get_attack2() << " !" << endl;
-    }
-    else if (h.get_action() == 3) {
-        brutdamage = h.set_attack3();
-        h.set_mana(h.get_mana() - h.get_manacost_attack3());
-        cout << h.get_attack3() << " !" << endl;
-    }
-    else if (h.get_action() == 0) {
-        brutdamage = h.set_ultimate();
-        cout << h.get_ultime() << " !" << endl;
+    if (p.get_action() == 1) {
+        brutdamage = p.get_damage_attack1();
+        p.set_mana(p.get_mana() - p.get_manacost_attack1());
+        cout << p.get_attack1() << " !" << endl;
+    } else if (p.get_action() == 2) {
+        brutdamage = p.get_damage_attack2();
+        p.set_mana(p.get_mana() - p.get_manacost_attack2());
+        cout << p.get_attack2() << " !" << endl;
+    } else if (p.get_action() == 3) {
+        brutdamage = p.get_damage_attack3();
+        p.set_mana(p.get_mana() - p.get_manacost_attack3());
+        cout << p.get_attack3() << " !" << endl;
+    } else if (p.get_action() == 0) {
+        if (p.get_name() == "Gogeta") {
+            brutdamage = 999999;
+        } else {
+            brutdamage = p.get_ultimate();
+        }
+        cout << p.get_ultime() << " !" << endl;
     }
     return brutdamage;
 }
 
-int makeMechantAction(Mechant& m, int attacksender) {
-    int brutdamage;
-    printf("\n");
-    if (m.get_action() == 1) {
-        brutdamage = m.set_attack1();
-        m.set_mana(m.get_mana() - m.get_manacost_attack1());
-        cout << m.get_attack1() << " !" << endl;
-    }
-    else if (m.get_action() == 2) {
-        brutdamage = m.set_attack2();
-        m.set_mana(m.get_mana() - m.get_manacost_attack2());
-        cout << m.get_attack2() << " !" << endl;
-    }
-    else if (m.get_action() == 3) {
-        brutdamage = m.set_attack3();
-        m.set_mana(m.get_mana() - m.get_manacost_attack3());
-        cout << m.get_attack3() << " !" << endl;
-    }
-    else if (m.get_action() == 0) {
-        brutdamage = m.set_ultimate();
-        cout << m.get_ultime() << " !" << endl;
-    }
-    return brutdamage;
-}
-
-int chooseHeroAttack(Hero& h, string name) {
+int chooseAttack(Personnage& p, string name) {
     int action;
     while (true) {
         cout << name << ") Quel attaque souhaitez-vous faire ?" << endl;
-        if (h.get_maxmana() > 0) {
-            cout << "1 - " << h.get_attack1() << " | Mana : " << h.get_manacost_attack1() << endl;
-            cout << "2 - " << h.get_attack2() << " | Mana : " << h.get_manacost_attack2() << endl;
-            cout << "3 - " << h.get_attack3() << " | Mana : " << h.get_manacost_attack3() << endl;
+        if (p.get_maxmana() > 0) {
+            cout << "1 - " << p.get_attack1() << " | Mana : " << p.get_manacost_attack1() << endl;
+            cout << "2 - " << p.get_attack2() << " | Mana : " << p.get_manacost_attack2() << endl;
+            cout << "3 - " << p.get_attack3() << " | Mana : " << p.get_manacost_attack3() << endl;
         }
         else {
-            cout << "1 - " << h.get_attack1() << endl;
-            cout << "2 - " << h.get_attack2() << endl;
-            cout << "3 - " << h.get_attack3() << endl;
+            cout << "1 - " << p.get_attack1() << endl;
+            cout << "2 - " << p.get_attack2() << endl;
+            cout << "3 - " << p.get_attack3() << endl;
         }
-        if (!h.is_ult_usable()) {
-            cout << "0 - " << h.get_ultime() << " | Utilisable dans : " << h.get_cd_ult() << " tours" << endl;
+        if (!p.is_ult_usable()) {
+            cout << "0 - " << p.get_ultime() << " | Utilisable dans : " << p.get_cd_ult() << " tours" << endl;
         }
         else {
-            cout << "0 - " << h.get_ultime() << " | Utilisable !" << endl;
+            cout << "0 - " << p.get_ultime() << " | Utilisable !" << endl;
         }
 
         cin >> action;
         if (action == 0) {
-            if (!h.is_ult_usable()) {
+            if (!p.is_ult_usable()) {
                 cout << "Vous etes encore en Cooldown de votre Ultime" << endl;
                 continue;
             }
         }
         else if (action == 1) {
-            if (h.get_mana() < h.get_manacost_attack1()) {
+            if (p.get_mana() < p.get_manacost_attack1()) {
                 cout << "Vous n'avez pas assez de mana pour utiliser cette Technique !" << endl;
                 continue;
             }
         }
         else if (action == 2) {
-            if (h.get_mana() < h.get_manacost_attack2()) {
+            if (p.get_mana() < p.get_manacost_attack2()) {
                 cout << "Vous n'avez pas assez de mana pour utiliser cette Technique !" << endl;
                 continue;
             }
         }
         else if (action == 3) {
-            if (h.get_mana() < h.get_manacost_attack3()) {
+            if (p.get_mana() < p.get_manacost_attack3()) {
                 cout << "Vous n'avez pas assez de mana pour utiliser cette Technique !" << endl;
                 continue;
             }
         }
         printf("\n");
         if (action == 1) {
-            if (h.get_maxmana() > 0) {
-                cout << name << ") -" << h.get_manacost_attack1() << " Mana" << endl;
+            if (p.get_maxmana() > 0) {
+                cout << name << ") -" << p.get_manacost_attack1() << " Mana" << endl;
             }
         }
         else if (action == 2) {
-            if (h.get_maxmana() > 0) {
-                cout << name << ") -" << h.get_manacost_attack2() << " Mana" << endl;
+            if (p.get_maxmana() > 0) {
+                cout << name << ") -" << p.get_manacost_attack2() << " Mana" << endl;
             }
         }
         else if (action == 3) {
-            if (h.get_maxmana() > 0) {
-                cout << name << ") -" << h.get_manacost_attack3() << " Mana" << endl;
+            if (p.get_maxmana() > 0) {
+                cout << name << ") -" << p.get_manacost_attack3() << " Mana" << endl;
             }
         }
-        h.set_action(action);
-        return makeHeroAction(h, h.get_attack());
-    }
-}
-
-int chooseMechantAttack(Mechant& m, string name) {
-    int action;
-    while (true) {
-        cout << name << ") Quel attaque souhaitez-vous faire ?" << endl;
-        if (m.get_maxmana() > 0) {
-            cout << "1 - " << m.get_attack1() << " | Mana : " << m.get_manacost_attack1() << endl;
-            cout << "2 - " << m.get_attack2() << " | Mana : " << m.get_manacost_attack2() << endl;
-            cout << "3 - " << m.get_attack3() << " | Mana : " << m.get_manacost_attack3() << endl;
-        }
-        else {
-            cout << "1 - " << m.get_attack1() << endl;
-            cout << "2 - " << m.get_attack2() << endl;
-            cout << "3 - " << m.get_attack3() << endl;
-        }
-        if (!m.is_ult_usable()) {
-            cout << "0 - " << m.get_ultime() << " | Utilisable dans : " << m.get_cd_ult() << " tours" << endl;
-        }
-        else {
-            cout << "0 - " << m.get_ultime() << " | Utilisable !" << endl;
-        }
-
-        cin >> action;
-        if (action == 0) {
-            if (!m.is_ult_usable()) {
-                cout << "Vous etes encore en Cooldown de votre Ultime" << endl;
-                continue;
-            }
-        }
-        else if (action == 1) {
-            if (m.get_mana() < m.get_manacost_attack1()) {
-                cout << "Vous n'avez pas assez de mana pour utiliser cette Technique !" << endl;
-                continue;
-            }
-        }
-        else if (action == 2) {
-            if (m.get_mana() < m.get_manacost_attack2()) {
-                cout << "Vous n'avez pas assez de mana pour utiliser cette Technique !" << endl;
-                continue;
-            }
-        }
-        else if (action == 3) {
-            if (m.get_mana() < m.get_manacost_attack3()) {
-                cout << "Vous n'avez pas assez de mana pour utiliser cette Technique !" << endl;
-                continue;
-            }
-        }
-        printf("\n");
-        if (action == 1) {
-            if (m.get_maxmana() > 0) {
-                cout << name << ") -" << m.get_manacost_attack1() << " Mana" << endl;
-            }
-        }
-        else if (action == 2) {
-            if (m.get_maxmana() > 0) {
-                cout << name << ") -" << m.get_manacost_attack2() << " Mana" << endl;
-            }
-        }
-        else if (action == 3) {
-            if (m.get_maxmana() > 0) {
-                cout << name << ") -" << m.get_manacost_attack3() << " Mana" << endl;
-            }
-        }
-        m.set_action(action);
-        return makeMechantAction(m, m.get_attack());
+        p.set_action(action);
+        return makeAction(p, p.get_attack());
     }
 
 
@@ -357,8 +266,15 @@ void makeArmor(int action, Personnage& p, int brutdamage, Personnage& p2, string
     int damage;
     printf("\n");
     if (action == 1) {
-        damage = p.encaisser(p.get_armor(), brutdamage);
-        p.set_health(p.get_health() - damage);
+        if (p.get_name() == "Zoro") {
+            srand(time(0));
+            int nombreAleatoire = rand() % 66;
+            damage = p.encaisser(0, brutdamage);
+            p.set_health(p.get_health() - damage);
+        } else {
+            damage = p.encaisser(p.get_armor(), brutdamage);
+            p.set_health(p.get_health() - damage);
+        }
     }
     else if (action == 2) {
         damage = p.esquive(p.get_armor(), p.get_speed(), brutdamage);
@@ -371,13 +287,19 @@ void makeArmor(int action, Personnage& p, int brutdamage, Personnage& p2, string
         }
     }
     else if (action == 3) {
-        damage = p.parer(p.get_armor(), brutdamage);
+        if (p.get_name() == "Zoro") {
+            srand(time(0));
+            int nombreAleatoire = rand() % 66;
+            damage = p.encaisser(0, brutdamage);
+        } else {
+            damage = p.parer(p.get_armor(), brutdamage);
+        }
         if (damage == brutdamage / 4) {
             p.set_health(p.get_health() - damage);
             p.set_armor(p.get_armor() - 15);
-            p2.set_health(p2.get_health() - damage);
+            p2.set_health(p2.get_health() - damage / 2);
             cout << p1name << ") " << p2.get_health() << "/" << p2.get_maxhealth() << " (-" << damage << " PV)" << endl;
-            cout << p1name << ") " << p2.get_armor() << "Armure (-15 Armure)" << endl;
+            cout << p1name << ") " << p2.get_armor() << " Armure (-15 Armure)" << endl;
         }
     }
     if (damage > 0) {
@@ -397,7 +319,7 @@ void makeArmor(int action, Personnage& p, int brutdamage, Personnage& p2, string
     checkWin(p, p2, p1name, p2name);
 }
 
-void resetround(Hero& p1, Mechant& p2) {
+void resetround(Personnage& p1, Personnage& p2) {
     p1.set_cd_ult(p1.get_cd_ult() - 1);
     p2.set_cd_ult(p2.get_cd_ult() - 1);
 
@@ -413,14 +335,24 @@ void resetround(Hero& p1, Mechant& p2) {
             cout << "Le Souffle du Soleil empeche la Regeneration Passive de Kokushibo !" << endl;
         }
     }
+    else if (p2.get_name() == "Zamasu") {
+        srand(time(0));
+        int randomValue = rand() % 100 + 1;
+        if (randomValue <= 5) {
+            std::cout << "Volonté de Zamasu !" << std::endl;
+            p1.set_health(0);
+        }
+    }
     else if (p1.get_name() == "Gojo") {
         if (p1.get_mana() <= 450) {
             p1.set_speed(p1.get_speed() - 25);
             cout << "Malus de Super Vitesse (-25 Vitesse)" << endl;
         }
         else {
-            p1.set_speed(p1.get_speed() + 25);
-            cout << "Bonus de Super Vitesse (+25 Vitesse)" << endl;
+            if (p1.get_speed() <= 45) {
+                p1.set_speed(p1.get_speed() + 25);
+                cout << "Bonus de Super Vitesse (+25 Vitesse)" << endl;
+            }
         }
     }
     else if (p1.get_name() == "Izuku") {
@@ -449,7 +381,7 @@ int main() {
     cout << p2 << " quel est votre pseudo ?" << endl;
     cin >> p2;
 
-    Hero gojo = Hero("Gojo", 150, 60, 15, 70, 1000, 75, 200, 500, 5, "Rouge : Flammes Incandescentes", "Bleu : Vague d'Eau Abyssale", "Violet : Eclair Pourpre", "Extension du territoire : Domaine de l'Infini");
+    Hero gojo = Hero("Gojo", 150, 60, 15, 50, 1000, 75, 200, 500, 5, "Rouge : Flammes Incandescentes", "Bleu : Vague d'Eau Abyssale", "Violet : Eclair Pourpre", "Extension du territoire : Domaine de l'Infini");
     gojo.set_passif("Sort D'Inversion : Lors de sa Premiere mort, Gojo reviendra a la vie avec 75 PV mais perdra 400 de Mana de facon permanente\nSuper Vitesse : S'il a moins de 450 de Mana, sa Vitesse diminuera de 25");
     gojo.can_revive(true);
     herolist.push_back(gojo);
@@ -457,26 +389,33 @@ int main() {
     izuku.set_passif("One For All : Izuku gagnera 5% de sa force, de son armure et de sa vitesse a chaque tour");
     herolist.push_back(izuku);
     Hero zoro = Hero("Zoro", 250, 35, 40, 30, 70, 25, 35, 50, 3, "Santoryu : Ittoryu Iai : Shishi Sonson", "Santoryu : Nitoryu : 108 Pound Phoenix", "Santoryu : Kyutoryu : Asura", "Santoryu : Sanzen Sekai");
+    zoro.set_passif("Revêtement du Haki des Rois : Les attaques de Zoro ont 65% de passer a travers l'Armure");
     herolist.push_back(zoro);
-    Hero yorrichi = Hero("Yoriichi", 230, 35, 10, 35, 800, 35, 75, 250, 5, "Valse", "Ciel d'Azur Sans Nuages", "Dragon du Halo Solaire - Tete Dansante", "Treizieme Mouvement");
-    yorrichi.set_passif("Souffle du Soleil : Le joueur face a Yorrichi est dans l'incapacite de recuperer de la vie de quelconque facon.");
-    herolist.push_back(yorrichi);
+    Hero yoriichi = Hero("Yoriichi", 230, 35, 10, 35, 800, 35, 75, 250, 5, "Valse", "Ciel d'Azur Sans Nuages", "Dragon du Halo Solaire - Tete Dansante", "Treizieme Mouvement");
+    yoriichi.set_passif("Souffle du Soleil : Le joueur face a Yorrichi est dans l'incapacite de recuperer de la vie de quelconque facon");
+    herolist.push_back(yoriichi);
+    Hero gogeta = Hero("Gogeta", 235, 40, 15, 40, 1250, 100, 225, 500, 10, "Kikoha", "Big Bang Attack", "Big Bang Kamé Hamé Ha", "Soul Punisher");
+    gogeta.set_passif("Soul Punisher : Son Ultime tue directement l'adversaire");
+    herolist.push_back(gogeta);
     Hero saitama = Hero("Saitama", 999999, 999999, 999999, 999999, 0, 0, 0, 0, 0, "Eternuement", "Pichenette", "-30% sur le rayon fromage", "Serious Punch");
     herolist.push_back(saitama);
 
-    Mechant toji = Mechant("Toji", 240, 50, 35, 55, 0, 0, 0, 0, 3, "Lame Tranchante", "Contre", "Impact Brutal", "Zero Absolu");
+    Mechant toji = Mechant("Toji", 240, 50, 35, 35, 0, 0, 0, 0, 3, "Lame Tranchante", "Contre", "Impact Brutal", "Zero Absolu");
     toji.set_passif("Serment Inne : Toji ne possède pas de Mana et aucune de ses attaques n'en consomment");
     mechantlist.push_back(toji);
     Mechant shigaraki = Mechant("Shigaraki", 180, 45, 15, 25, 350, 30, 65, 125, 4, "Toucher de la Mort", "Decomposition", "Onde de Choc Desintegrante", "Regeneration Anormale");
     shigaraki.set_passif("Desintegration : A chaque Attaque que fera Shigaraki, le joueur touche perdra 10% de ses PV Max");
     mechantlist.push_back(shigaraki);
-    Mechant ener = Mechant("Ener", 190, 55, 25, 75, 100, 25, 30, 45, 4, "Sango", "Despia", "El Thor", "Raigo");
-    ener.set_passif("Goro Goro no Mi : Ener a 10% de chance de stun son ennemi à chaque attaque\nShinzo Massage : Ener reviendra à la vie avec 95 PV Max");
+    Mechant ener = Mechant("Ener", 190, 55, 25, 40, 100, 25, 30, 45, 4, "Sango", "Despia", "El Thor", "Raigo");
+    ener.set_passif("Shinzo Massage : Ener reviendra a la vie avec 95 PV Max");
     ener.can_revive(true);
     mechantlist.push_back(ener);
-    Mechant kokushibo = Mechant("Kokushibo", 150, 50, 20, 40, 700, 50, 75, 300, 4, "Premier Mouvement : Lune Obscur: Palais Vesperal", "Septieme Mouvement : Miroir Malefique, Sublimation Lunaire", "Dixieme Mouvement : Rayons de Lune Perforant le Feuillage", "Seizieme Mouvement : Arc-en-Ciel Lunaire - Demi-Lune");
+    Mechant kokushibo = Mechant("Kokushibo", 150, 50, 20, 35, 700, 50, 75, 300, 4, "Premier Mouvement : Lune Obscur: Palais Vesperal", "Septieme Mouvement : Miroir Malefique, Sublimation Lunaire", "Dixieme Mouvement : Rayons de Lune Perforant le Feuillage", "Seizieme Mouvement : Arc-en-Ciel Lunaire - Demi-Lune");
     kokushibo.set_passif("Regeneration Naturel : Kokushibo regenere 100 PV a chaque tours");
     mechantlist.push_back(kokushibo);
+    Mechant zamasu = Mechant("Zamasu", 235, 40, 15, 40, 1250, 100, 225, 500, 4, "Kikoha", "Zettai no Ikazuchi", "Illusion smash", "Hikari no KabeSoul Punisher");
+    zamasu.set_passif("Volonté de Zamasu : Zamazu a 5% de chance à chaque fin de tour de directement gagner la partie.");
+    mechantlist.push_back(zamasu);
     Mechant kira = Mechant("Kira", 0, 0, 0, 0, 0, 0, 0, 0, 0, "", "", "", "");
     mechantlist.push_back(kira);
 
@@ -515,32 +454,40 @@ int main() {
         while (true) {
             if (p1c.get_speed() >= p2c.get_speed()) {
                 printStat(p1c);
-
-                brutdamage = chooseHeroAttack(p1c, p1);
-                armor = chooseArmor(p2c, p1c, p2);
-                makeArmor(armor, p2c, brutdamage, p1c, p1, p2);
-
+                if (p1c.is_ult_usable() || p1c.get_manacost_attack1() <= p1c.get_mana()) {
+                    brutdamage = chooseAttack(p1c, p1);
+                    armor = chooseArmor(p2c, p1c, p2);
+                    makeArmor(armor, p2c, brutdamage, p1c, p1, p2);
+                } else {
+                    cout << p1 << ") Vous n'avez plus assez de Mana pour executer une Attaque" << endl;
+                }
                 printStat(p2c);
-
-                brutdamage = chooseMechantAttack(p2c, p2);
-                armor = chooseArmor(p1c, p2c, p1);
-                makeArmor(armor, p1c, brutdamage, p2c, p2, p1);
-
+                if (p2c.is_ult_usable() || p2c.get_manacost_attack1() <= p2c.get_mana()) {
+                    brutdamage = chooseAttack(p2c, p2);
+                    armor = chooseArmor(p1c, p2c, p1);
+                    makeArmor(armor, p1c, brutdamage, p2c, p2, p1);
+                } else {
+                    cout << p2 << ") Vous n'avez plus assez de Mana pour executer une Attaque" << endl;
+                }
                 resetround(p1c, p2c);
             }
             else {
                 printStat(p2c);
-
-                brutdamage = chooseMechantAttack(p2c, p2);
-                armor = chooseArmor(p1c, p2c, p1);
-                makeArmor(armor, p1c, brutdamage, p2c, p2, p1);
-
+                if (p2c.is_ult_usable() || p2c.get_manacost_attack1() <= p2c.get_mana()) {
+                    brutdamage = chooseAttack(p2c, p2);
+                    armor = chooseArmor(p1c, p2c, p1);
+                    makeArmor(armor, p1c, brutdamage, p2c, p2, p1);
+                } else {
+                    cout << p2 << ") Vous n'avez plus assez de Mana pour executer une Attaque" << endl;
+                }
                 printStat(p1c);
-
-                brutdamage = chooseHeroAttack(p1c, p1);
-                armor = chooseArmor(p2c, p1c, p2);
-                makeArmor(armor, p2c, brutdamage, p1c, p1, p2);
-
+                if (p1c.is_ult_usable() || p1c.get_manacost_attack1() <= p1c.get_mana()) {
+                    brutdamage = chooseAttack(p1c, p1);
+                    armor = chooseArmor(p2c, p1c, p2);
+                    makeArmor(armor, p2c, brutdamage, p1c, p1, p2);
+                } else {
+                    cout << p1 << ") Vous n'avez plus assez de Mana pour executer une Attaque" << endl;
+                }
                 resetround(p1c, p2c);
             }
         }
@@ -565,32 +512,40 @@ int main() {
         while (true) {
             if (p1c.get_speed() >= p2c.get_speed()) {
                 printStat(p1c);
-
-                brutdamage = chooseMechantAttack(p1c, p1);
-                armor = chooseArmor(p2c, p1c, p2);
-                makeArmor(armor, p2c, brutdamage, p1c, p2, p1);
-
+                if (p1c.is_ult_usable() || p1c.get_manacost_attack1() <= p1c.get_mana()) {
+                    brutdamage = chooseAttack(p1c, p1);
+                    armor = chooseArmor(p2c, p1c, p2);
+                    makeArmor(armor, p2c, brutdamage, p1c, p2, p1);
+                } else {
+                    cout << p1 << ") Vous n'avez plus assez de Mana pour executer une Attaque" << endl;
+                }
                 printStat(p2c);
-
-                brutdamage = chooseHeroAttack(p2c, p2);
-                armor = chooseArmor(p1c, p2c, p1);
-                makeArmor(armor, p1c, brutdamage, p2c, p1, p2);
-
+                if (p2c.is_ult_usable() || p2c.get_manacost_attack1() <= p2c.get_mana()) {
+                    brutdamage = chooseAttack(p2c, p2);
+                    armor = chooseArmor(p1c, p2c, p1);
+                    makeArmor(armor, p1c, brutdamage, p2c, p1, p2);
+                } else {
+                    cout << p2 << ") Vous n'avez plus assez de Mana pour executer une Attaque" << endl;
+                }
                 resetround(p2c, p1c);
             }
             else {
                 printStat(p2c);
-
-                brutdamage = chooseHeroAttack(p2c, p2);
-                armor = chooseArmor(p1c, p2c, p1);
-                makeArmor(armor, p1c, brutdamage, p2c, p1, p2);
-
+                if (p2c.is_ult_usable() || p2c.get_manacost_attack1() <= p2c.get_mana()) {
+                    brutdamage = chooseAttack(p2c, p2);
+                    armor = chooseArmor(p1c, p2c, p1);
+                    makeArmor(armor, p1c, brutdamage, p2c, p1, p2);
+                }else {
+                    cout << p2 << ") Vous n'avez plus assez de Mana pour executer une Attaque" << endl;
+                }
                 printStat(p1c);
-
-                brutdamage = chooseMechantAttack(p1c, p1);
-                armor = chooseArmor(p2c, p1c, p2);
-                makeArmor(armor, p2c, brutdamage, p1c, p2, p1);
-
+                if (p1c.is_ult_usable() || p1c.get_manacost_attack1() <= p1c.get_mana()) {
+                    brutdamage = chooseAttack(p1c, p1);
+                    armor = chooseArmor(p2c, p1c, p2);
+                    makeArmor(armor, p2c, brutdamage, p1c, p2, p1);
+                } else {
+                    cout << p1 << ") Vous n'avez plus assez de Mana pour executer une Attaque" << endl;
+                }
                 resetround(p2c, p1c);
             }
         }

@@ -29,15 +29,19 @@ string Hero::get_ultime() {
 }
 
 int Hero::get_damage_attack1() {
-    return damage_attack1;
+    return get_attack() + rand() % 11;
 }
 
 int Hero::get_damage_attack2() {
-    return damage_attack2;
+    return get_attack() + 10 + rand() % 16;
 }
 
 int Hero::get_damage_attack3() {
-    return damage_attack3;
+    return get_attack() + 25 + rand() % 26;
+}
+
+int Hero::get_ultimate() {
+    return get_damage_attack1() + get_damage_attack2() + get_damage_attack3();
 }
 
 int Hero::get_manacost_attack1() {
@@ -50,22 +54,6 @@ int Hero::get_manacost_attack2() {
 
 int Hero::get_manacost_attack3() {
     return manacost_attack3;
-}
-
-int Hero::set_attack1() {
-    return get_attack() + 10;
-}
-
-int Hero::set_attack2() {
-    return get_attack() + 25;
-}
-
-int Hero::set_attack3() {
-    return get_attack() + 50;
-}
-
-int Hero::set_ultimate() {
-    return get_damage_attack1() + get_damage_attack2() + get_damage_attack3();
 }
 
 int Hero::set_manacost_attack1(int mana) {

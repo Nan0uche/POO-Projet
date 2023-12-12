@@ -14,7 +14,7 @@ Personnage::Personnage(string n, int hp, int atk, int arm, int spe, int man, int
 
 Personnage::~Personnage() {}
 
-string Personnage::get_name() {
+string Personnage::get_name() const {
     return name;
 }
 
@@ -23,6 +23,9 @@ int Personnage::get_maxhealth() {
 }
 
 int Personnage::get_health() {
+    if (health < 0) {
+        health = 0;
+    }
     return health;
 }
 

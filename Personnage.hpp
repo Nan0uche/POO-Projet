@@ -23,9 +23,9 @@ private:
 	bool revive = false;
 public:
 	Personnage(string n, int hp, int atk, int arm, int spe, int man, int cdult);
-	~Personnage();
+	virtual ~Personnage();
 
-	string get_name();
+	string get_name() const;
 	int get_maxhealth();
 	int get_health();
 	int get_attack();
@@ -46,13 +46,13 @@ public:
 	void set_cd_ult(int cdult);
 	void set_action(int act);
 
-	int encaisser(int armorvictim, int predamage);
-	int esquive(int armorvictim, int speedvictim, int predamage);
-	int parer(int armorvictim, int predamage);
+	virtual int encaisser(int armorvictim, int predamage);
+	virtual int esquive(int armorvictim, int speedvictim, int predamage);
+	virtual int parer(int armorvictim, int predamage);
 
 	bool is_ult_usable();
 
-	int regen_mana(int pourcentage);
+	virtual int regen_mana(int pourcentage);
 
 	void set_passif(string pas);
 	string get_passif();
@@ -60,5 +60,22 @@ public:
 
 	void can_revive(bool rev);
 	bool has_revive();
+
+
+	virtual string get_attack1() = 0;
+	virtual string get_attack2() = 0;
+	virtual string get_attack3() = 0;
+	virtual string get_ultime() = 0;
+	virtual int get_damage_attack1() = 0;
+	virtual int get_damage_attack2() = 0;
+	virtual int get_damage_attack3() = 0;
+	virtual int get_ultimate() = 0;	
+	virtual int get_manacost_attack1() = 0;
+	virtual int get_manacost_attack2() = 0;
+	virtual int get_manacost_attack3() = 0;
+
+	virtual int set_manacost_attack1(int mana) = 0;
+	virtual int set_manacost_attack2(int mana) = 0;
+	virtual int set_manacost_attack3(int mana) = 0;
 };
 #endif // !PERSONNAGE
